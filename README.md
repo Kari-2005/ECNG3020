@@ -26,8 +26,9 @@ The intended control approach is **shared control**. The vision system assists w
 ECNG3020/
 ├── README.md
 ├── docs/
-│   ├── 01_Setup.md
-│   ├── 02_First_Xacro_Model.md
+│   ├── ros2/
+│   │   ├── 01_Setup.md
+│   │   └── 02_First_Xacro_Model.md
 │   └── 03_System_Overview.md
 ├── cad/                 # Planned CAD and mechanical design files
 ├── ros2_ws/             # Planned ROS 2 workspace and packages
