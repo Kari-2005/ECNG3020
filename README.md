@@ -100,7 +100,7 @@ Temperature sensing operates alongside the main grasping loop as a safety-monito
 ## Project Status
 This repository is a working engineering repository and will change throughout the project. Design choices marked as planned or under investigation are not yet final.
 
-For a more detailed breakdown of the planned system, see [docs/03_System_Overview.md](docs/System_Overview.md).
+For a more detailed breakdown of the planned system, see [docs/System_Overview.md](docs/System_Overview.md).
 
 ## Tools and Technologies
 Current or planned tools include:
