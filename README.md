@@ -148,6 +148,8 @@ I will record changes, trade-offs, prices and test results in the [Component Res
 
 ## Documentation
 
+- [Development Progress Log](docs/Development_Progress_Log.md) — week-by-week history from project planning to current component research, including completed work and challenges.
+
 - [Component Research and Decision Log](docs/Component_Research_and_Decision_Log.md) — comparisons, design choices and parts still under investigation.
 - [System Overview](docs/System_Overview.md) — early system-planning notes (some sections predate the current hybrid design).
 - [ROS 2 Setup](docs/ros2/01_Setup.md) — setup notes.
