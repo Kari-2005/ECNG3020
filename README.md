@@ -1,125 +1,164 @@
-# ECNG3020 — Robotic Prosthetic Project
+# ECNG 3020 — Robotic Prosthetic Hand
 
-## Project Title
-**Design, Simulation, and Development of a Deep-Learning-Assisted Robotic Prosthesis with Haptic Tactile Feedback**
+**Project title:** Design, Simulation, and Development of a Deep-Learning-Assisted Robotic Prosthesis with Haptic Tactile Feedback
 
-This repository contains the code, simulation files, design notes, documentation, and supporting project files for my ECNG3020 Final Year Project.
+This repository documents my **individual final-year project** in Electrical and Computer Engineering at The University of the West Indies, St. Augustine. It contains my research, component comparisons, CAD and mechanical design work, ROS 2 simulation notes, code, electronics, tests and project documentation as they develop.
 
-## Project Overview
-The project focuses on the development of a proof-of-concept robotic upper-limb prosthesis based on an open-source hand platform. The proposed system combines:
+> **Current stage (October 2026):** System design, component selection, purchasing requests and early ROS 2 work. The complete physical prosthetic and integrated control system have **not** yet been built or validated.
 
-- myoelectric (sEMG) user input
-- vision-assisted object recognition and grasp selection
-- tendon-driven finger actuation
-- fingertip tactile/force sensing
-- vibrotactile haptic feedback
-- temperature-based safety monitoring
-- embedded control
-- ROS 2 and Gazebo simulation
-- 3D-printed mechanical components
+## Project aim
 
-The intended control approach is **shared control**. The vision system assists with identifying an object and selecting a suitable grasp pattern, while the user provides the intentional command to carry out the grasp through sEMG.
+I am developing an affordable proof-of-concept upper-limb prosthetic hand that combines:
 
-## Repository Structure
+- **Myoelectric control:** detect an intentional muscle contraction to activate a grasp.
+- **Vision-assisted grasp selection:** recognize an object and help select a suitable grasp, such as power, pinch or precision.
+- **Tendon-driven fingers:** use servos and fishing-line tendons to open and close the hand.
+- **Grip-pressure sensing:** monitor contact at the fingertips to help limit excessive gripping.
+- **Wearable haptic feedback:** send touch information back through five vibration locations on a sleeve.
+- **Additional sensing investigations:** explore object-slip detection and non-contact temperature warnings.
+- **Design and simulation:** develop the mechanical model in CAD and test it with ROS 2 and Gazebo.
+
+The goal is **shared control**: the vision system assists with choosing a grasp, but the user provides the muscle-activation command. I will start with a small set of objects and grasp types rather than full 3D autonomous grasp planning.
+
+## Mechanical design — current direction
+
+I plan to combine parts from the open-source [opsobot Yeah Hand / Rebelia project](https://github.com/opsobot/yeah-hand):
+
+| Section | Planned approach |
+|---|---|
+| **Hand and fingers** | Yeah Hand **V2** finger, palm and tendon mechanism |
+| **Forearm** | Yeah Hand **V1** section below the wrist, adapted as the prosthetic forearm |
+| **Actuator location** | Keep the servos in the **V2 upper-hand assembly**, rather than moving them into the forearm |
+| **Finger movement** | Keep the V2 **opposing tendon lines** for active closing and opening, using printable spools |
+| **Wrist** | Design a **manual twist-and-lock joint** with target positions of −90°, 0° and +90° around the forearm axis |
+| **Camera location** | Small, angled raised mount near the wrist, facing the grasping area |
+
+This is a **planned hybrid**, not a confirmed drop-in fit. I still need to check the V1/V2 wrist connection, servo space, tendon travel, mounting strength and cable routing. The wrist will need a protected cable path so movement does not strain the camera, servo or sensor wiring.
+
+The V2 dual-tendon approach avoids relying on elastic cord to reopen the fingers, provided the original routing works with my modifications.
+
+## Planned electronics and control
+
+| Part | Current choice or investigation | Status |
+|---|---|---|
+| High-level computer | **Raspberry Pi 5, 4GB** (TRASKIT starter kit) | Selected; included in Amazon purchasing request |
+| Camera | **Raspberry Pi Camera Module 3 Wide (SC1224)** | Selected; included in DigiKey request |
+| Camera connection | **Pi 5-compatible 500 mm ribbon cable (SC1130)** | Selected; included in DigiKey request |
+| Low-level controller | **ESP32-S3 development board** | Already available; exact pin allocation pending |
+| Muscle sensor | **MyoWare 2 (DEV-27924)** | Selected; included in DigiKey request |
+| External EMG electrodes | Cable Shield 18386, three-electrode cable 12970, DFRobot FIT0510 pads | Included in DigiKey request; connector fit and signal testing pending |
+| Servos | **270° positional metal-gear PWM servos** preferred over expensive smart servos | Candidate only; exact model/size not finalized |
+| Pressure sensing | Five fingertip FSRs; **FSR 400 Short** is a candidate | Size and placement still to be checked |
+| Slip sensing | One piezoelectric film sensor on a test finger | Possible extension; not finalized |
+| Temperature sensing | **MLX90614 infrared sensor** or suitable breakout | Preferred approach; exact version not finalized |
+| Haptic feedback | Five small coin vibration motors in the sleeve, with individual driver circuits | Planned; final parts pending |
+| Power | Separate servo supply, regulators/protection and eventual portable battery | Not designed/finalized |
+
+I considered the **NVIDIA Jetson Orin** for AI processing, but it was much more expensive than needed for my initial lightweight model. The Raspberry Pi 5 is the current choice.
+
+I intend to **train or fine-tune the vision model away from the Pi where necessary**, then run lightweight predictions on the Pi. The ESP32-S3 will handle sensor sampling, motor commands and haptic outputs. Ordinary PWM servos can take control signals from the ESP32-S3 without a smart-servo bus board, but **they still require their own suitable power supply**.
+
+### Myoelectric sleeve
+
+For the initial experiments, I plan to use MyoWare with compatible gel electrode pads. Later I want to try **reusable conductive-fabric electrodes sewn into a sleeve**, based on the [MyoWare conductive-fabric tutorial](https://myoware.com/project/conductive-fabric-electrodes/). The same sleeve could hold five separate vibration-feedback zones.
+
+**Electrical safety:** Electrodes placed on skin require an appropriately isolated, body-safe measurement and communication setup. The MyoWare Cable Shield is an electrode connector, **not** an isolation device. I will not treat a direct wired connection to mains-powered equipment as safe for body-connected testing.
+
+## How the system is intended to work
+
+```text
+Camera Module 3 Wide
+        |
+        v
+Raspberry Pi 5: object recognition + grasp selection
+        |
+        v
+ESP32-S3 receives selected grasp
+        ^
+        |  MyoWare muscle-activation signal
+        |
+        v
+ESP32-S3 commands PWM servos -> V2 spools and dual tendons
+        |
+        v
+Fingers move and touch object
+        |
+        +--> Fingertip FSRs --> grip-pressure control / limits
+        |
+        +--> Five sleeve vibration motors --> tactile feedback
+
+Optional additions:
+  Piezo sensor --> slip investigation / warning
+  IR sensor    --> non-contact temperature warning
+```
+
+The pressure sensors will provide relative contact measurements, not perfect force measurements. Slip detection and automatic grip adjustment will need controlled testing before being presented as working features. Temperature sensing will be experimental feedback, **not guaranteed burn protection**.
+
+## Software and simulation
+
+My intended workflow is:
+
+1. Adapt the V2 hand and V1 forearm in **Fusion 360**; design the manual wrist and sensor mounts.
+2. Check rigid parts, joints and pivot positions before exporting meshes and a **URDF/Xacro** model.
+3. Check the assembly in **RViz** and develop a simplified **Gazebo** simulation.
+4. Develop camera-based object classification / grasp selection in Python (using suitable OpenCV and deep-learning tools).
+5. Program the ESP32-S3 for EMG trigger detection, servo control, tactile readings and feedback.
+6. Integrate the subsystems and compare simulation results with the physical prototype where practical.
+
+I have been using **Ubuntu 24.04 and ROS 2 Jazzy** for early experiments. Earlier Xacro and RViz work was exploratory and does **not** yet represent a completed V1/V2 hybrid simulation. Tendon behavior may initially be simplified in ROS 2/Gazebo.
+
+## Repository layout
+
+These paths currently exist:
 
 ```text
 ECNG3020/
 ├── README.md
-├── docs/
-│   ├── ros2/
-│   │   ├── 01_Setup.md
-│   │   └── 02_First_Xacro_Model.md
-│   └── 03_System_Overview.md
-├── cad/                 # Planned CAD and mechanical design files
-├── ros2_ws/             # Planned ROS 2 workspace and packages
-├── firmware/            # Planned microcontroller firmware
-├── vision/              # Planned object-recognition / deep-learning code
-├── electronics/         # Planned circuit diagrams and hardware notes
-├── testing/             # Planned test scripts, data and results
-└── report/              # Planned report-related project material
+└── docs/
+    ├── Component_Research_and_Decision_Log.md
+    ├── System_Overview.md
+    └── ros2/
+        ├── 01_Setup.md
+        └── 02_First_Xacro_Model.md
 ```
 
-> Some folders above are planned and will be added as the project develops.
+The **component decision log** contains the most recent comparisons and choices. **System_Overview.md is an earlier planning document and may contain superseded options**; this README and the decision log reflect the current direction.
 
-## Current Development Areas
+Possible future folders, once there are files to add: `cad/`, `ros2_ws/`, `firmware/`, `vision/`, `electronics/`, `testing/` and `report/`. These folders have **not yet been created**.
 
-### Mechanical Design
-- Adapt an open-source prosthetic hand platform.
-- Design a forearm section to house actuation, electronics, wiring and controllers.
-- Investigate tendon-driven finger actuation with passive elastic return.
-- Develop an adjustable wrist mechanism.
+## Purchase and development status
 
-### Myoelectric Control
-- Acquire and process surface EMG signals.
-- Investigate calibration, filtering and threshold-based intent detection.
-- Use sEMG as the user command that triggers the selected grasp.
+**First purchasing requests prepared (not necessarily placed or delivered):**
 
-### Vision-Assisted Grasping
-- Detect or classify objects using a camera and deep-learning model.
-- Map detected objects to predefined grasp patterns.
-- Retain user control of the final grasp action.
+- **Amazon:** TRASKIT Raspberry Pi 5 4GB starter kit with 64GB microSD card.
+- **DigiKey:** MyoWare 2 sensor, Cable Shield, three-electrode cable, gel electrode pads, Camera Module 3 Wide and Pi 5 ribbon cable.
 
-### Tactile and Haptic Feedback
-- Use fingertip force-sensitive sensing to detect contact and estimate grip force.
-- Investigate object-slip detection where practical.
-- Map tactile information to localized vibrotactile feedback on the user.
+**Next purchases or tests to settle:**
 
-### Safety Monitoring
-- Investigate non-contact temperature sensing.
-- Provide an alert for potentially unsafe hot or cold conditions.
+- Measure V2 palm/spool and tendon travel; **test one 270° positional PWM servo** before ordering five.
+- Finalize fishing line and PTFE tubing against the actual model.
+- Check V2 fingertip dimensions; test an FSR on one finger before buying the whole set.
+- Choose the five vibration motors, motor drivers and their power supply.
+- Investigate one piezo film slip sensor and one IR temperature sensor.
+- Design the rotatable wrist connector and wiring route.
+- Complete the isolated EMG testing arrangement and power-distribution plan.
+- Continue Fusion 360 modeling, ROS 2 simulation and eventual physical integration.
 
-### Simulation
-- Build the prosthetic model using URDF/Xacro.
-- Simulate the system using ROS 2 and Gazebo.
-- Evaluate joint motion, grasping, contact behaviour and tendon behaviour where practical.
+I will record changes, trade-offs, prices and test results in the [Component Research and Decision Log](docs/Component_Research_and_Decision_Log.md), rather than claiming a part is validated simply because it was selected for purchase.
 
-## Planned System Flow
+## Documentation
 
-```text
-Camera
-  ↓
-Object Recognition / Grasp Prediction
-  ↓
-Selected Grasp
-  ↓
-User sEMG Trigger
-  ↓
-Embedded Controller
-  ↓
-Servo / Tendon Actuation
-  ↓
-Object Contact
-  ↓
-Fingertip Force Sensors
-  ↓
-Vibrotactile Feedback to User
-```
-
-Temperature sensing operates alongside the main grasping loop as a safety-monitoring function.
-
-## Project Status
-This repository is a working engineering repository and will change throughout the project. Design choices marked as planned or under investigation are not yet final.
-
-For a more detailed breakdown of the planned system, see [docs/System_Overview.md](docs/System_Overview.md).
-
-## Tools and Technologies
-Current or planned tools include:
-
-- ROS 2
-- Gazebo
-- URDF / Xacro
-- Fusion 360 / SolidWorks
-- Python
-- PyTorch or TensorFlow
-- OpenCV
-- ESP32-S3
-- Raspberry Pi or NVIDIA Jetson-class embedded platform
-- 3D printing
+- [Component Research and Decision Log](docs/Component_Research_and_Decision_Log.md) — comparisons, design choices and parts still under investigation.
+- [System Overview](docs/System_Overview.md) — early system-planning notes (some sections predate the current hybrid design).
+- [ROS 2 Setup](docs/ros2/01_Setup.md) — setup notes.
+- [First Xacro Model](docs/ros2/02_First_Xacro_Model.md) — early Xacro work.
+- [Yeah Hand open-source project](https://github.com/opsobot/yeah-hand) — mechanical reference.
+- [Yeah Hand bill of materials](https://github.com/opsobot/yeah-hand/blob/main/hardware/BOM.md) — original design parts reference.
 
 ## Author
+
 Ansarah Mohammed  
 BSc Electrical & Computer Engineering  
 The University of the West Indies, St. Augustine
 
-## Academic Project
-This repository is maintained as part of ECNG3020 and is intended to document the development process, design decisions, simulations, implementation, testing and final project outputs.
+*This README is a living record of an individual engineering project. Planned features and selected purchase items will be updated as they are tested and finalized.*
