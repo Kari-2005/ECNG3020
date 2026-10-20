@@ -2,6 +2,8 @@
 
 This document records the first ROS 2 robot-description test created for the ECNG 3020 robotic prosthesis project.
 
+This was my **first attempt at learning ROS 2 modeling while initially considering the OpenBionics hand**. The first test used simple palm-and-finger boxes, not the actual imported OpenBionics hand. I later experimented with OpenBionics meshes and faced alignment/joint-placement problems.
+
 The purpose of this stage was not to create the final prosthetic geometry. It was to verify that the ROS 2 workspace could:
 
 - load a Xacro / URDF robot description;
@@ -231,4 +233,13 @@ RViz RobotModel
 
 It also confirmed that the `index_mcp_joint` could act as a revolute joint between the palm and first index-finger link.
 
-This placeholder model is not intended to represent the final mechanical design. The next development stage is to replace the box geometry with CAD meshes from the OpenBionics prosthetic hand repository and evaluate their orientation, scale, segmentation, and joint compatibility.
+This placeholder model is not intended to represent the final mechanical design. **The original next-step plan was to try OpenBionics meshes. That plan has since changed.** I am now using the **opsobot Yeah Hand V2 hand/fingers with the V1 forearm** as the mechanical starting point.
+
+### Revised next steps (October 2026)
+
+1. Develop and check the new hybrid assembly in **Fusion 360**, including the V2 finger joints, V1 forearm, manual locking wrist and actuator/wire space.
+2. Prepare the moving links, joint locations and axes, and export the model for **URDF/Xacro**.
+3. Reuse my existing **ROS 2 Jazzy** setup to display and check the updated model in **RViz**.
+4. Move to **Gazebo** for simplified finger motion and grasping tests after the joints and geometry look correct.
+
+The first ROS 2 experiment successfully tested the software pipeline, but it was **not** a completed OpenBionics or Yeah Hand simulation. The new mechanical design should be checked before attempting full simulation.
