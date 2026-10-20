@@ -70,7 +70,7 @@ I separate **completed work** from **research, decisions and work still to be do
 
 ## Week 5 — Approximately 29 September–5 October: ROS 2 setup and first model
 
-**Main focus:** Get the software environment running and learn how a robot model moves in simulation.
+**Main focus:** My first ROS 2 attempt while exploring the OpenBionics hand as the initial mechanical reference. I first tested the robot-description process using a simple palm and finger, rather than a fully imported OpenBionics model.
 
 **Completed and documented in the repository:**
 - Set up **WSL2** and **Ubuntu 24.04 LTS** on my Windows HP Pavilion x360.
@@ -90,14 +90,16 @@ I separate **completed work** from **research, decisions and work still to be do
 
 **Difficulties:** Initial Ubuntu setup, missing build tools, XML formatting and RViz camera scale.
 
-**Next steps identified:** Replace the simple shapes with real CAD geometry, check link alignment, and adapt the hand before attempting more complex simulation.
+**Change in direction:** I initially intended to replace the placeholder geometry with OpenBionics meshes. After further difficulties with the imported mesh/joint alignment, I changed the intended mechanical design to the Yeah Hand V2/V1 hybrid. The initial ROS 2 work remains a useful learning and setup test, not the final simulated model.
+
+**Revised next step:** Develop and check the V2 upper-hand/V1 forearm hybrid in **Fusion 360**, including the wrist adapter and joint placements, then export and check the updated robot description in **ROS 2 Jazzy/RViz** before further **Gazebo** testing.
 
 ## Week 6 — Approximately 6–12 October: Change to Yeah Hand and reorganize the project
 
 **Main focus:** Reduce unnecessary modeling problems and select a better mechanical starting point.
 
 **Work recorded:**
-- Experimented with importing existing hand meshes, including OpenBionics geometry, and encountered alignment/joint-placement problems.
+- Continued the first ROS 2/OpenBionics modeling attempt and encountered imported-mesh alignment and joint-placement problems. This helped explain why I should finish and check the mechanical assembly before attempting the full simulation.
 - Compared that route with the open-source **opsobot Yeah Hand / Rebelia** designs.
 - Changed the preferred design to a **hybrid**: **Yeah Hand V2 fingers/palm/tendon mechanism** and **V1 forearm below the wrist**.
 - Decided to investigate retaining the V2 servos and dual opposing tendons in the upper-hand assembly. This avoids running active finger tendons through a rotating wrist.
@@ -175,7 +177,7 @@ I separate **completed work** from **research, decisions and work still to be do
 
 ## 10. Work in progress / not yet complete
 
-- Complete Fusion 360 hybrid model, wrist adapter, servo mounts and protected cable routing.
+- **Immediate next task:** build/check the V2 hand + V1 forearm assembly in Fusion 360, including the manual wrist, finger joint positions, servo mounts and protected cable routing. Then export to URDF/Xacro and verify it in ROS 2 Jazzy/RViz before Gazebo.
 - Confirm suitable 270° PWM servo, spool adapter and tendon travel with one prototype finger.
 - Finalize 3D-print requirements, tendon lengths, PTFE tubes and mechanical hardware.
 - Measure fingertip space and test one FSR and one vibration motor circuit.
