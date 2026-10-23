@@ -1,0 +1,24 @@
+# ECNG 3020 — Robotic Prosthetic Hand: Computer Vision
+
+This folder documents the vision subsystem's development from pretrained YOLO26n webcam tests to an experimental fourteen-class dataset and prospective grasp selection.
+
+## Development history
+- [Log 001 — Setup](docs/development_log_001.md)
+- [Log 002 — YOLO26n webcam baseline](docs/development_log_002.md)
+- [Log 003 — YOLO-World alternative](docs/development_log_003.md)
+- [Log 004 — Tennis-ball/apple fine-tuning](docs/development_log_004.md)
+- [Log 005 — Dataset progression to 14 classes](docs/development_log_005.md)
+- [Vision architecture and future integration](docs/vision_system_overview.md)
+
+## Major experiment scripts
+- [Initial YOLO26n webcam test](scripts/test_camera.py)
+- [YOLO-World webcam test](scripts/test_yolo_world.py)
+- [Train tennis-ball/apple model](scripts/train_ball_model.py)
+- [Test tennis-ball/apple model](scripts/test_ball_model.py)
+- [Train 14-class detector](scripts/train_prosthetic_14class.py)
+- [Test 14-class detector](scripts/test_prosthetic_14class.py)
+- [Draft grasp mapping](configs/grasp_mapping_draft.py)
+
+**Important:** These scripts are reconstructed from the recorded development conversation, **not byte-for-byte verified copies** of the working SSD scripts. Check local paths and experimental settings before running them; record revisions alongside future test results. The 14-class run is prepared, **not confirmed trained/evaluated**.
+
+Large original and derived datasets, model weights (`.pt`), training run outputs and virtual environments are excluded from these commits. Keep original Roboflow source exports and their credits/licenses separately. Do not claim verified performance without independent evaluation.
