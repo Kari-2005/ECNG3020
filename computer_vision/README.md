@@ -22,3 +22,18 @@ This folder documents the vision subsystem's development from pretrained YOLO26n
 **Important:** These scripts are reconstructed from the recorded development conversation, **not byte-for-byte verified copies** of the working SSD scripts. Check local paths and experimental settings before running them; record revisions alongside future test results. The 14-class run is prepared, **not confirmed trained/evaluated**.
 
 Large original and derived datasets, model weights (`.pt`), training run outputs and virtual environments are excluded from these commits. Keep original Roboflow source exports and their credits/licenses separately. Do not claim verified performance without independent evaluation.
+
+## Updated experiments (October 2026)
+
+The original development logs above are retained as historical records. Since those logs, the **14-class model was trained and evaluated**, a **five-class model was trained and webcam-tested**, and a **three-gesture MediaPipe webcam proof of concept** was demonstrated.
+
+- [All six experiments](experiments/README.md)
+- [14-class pilot results](experiments/04_14class_pilot/README.md)
+- [Five-class detector results](experiments/05_5class_model/README.md)
+- [High-five, fist bump and thumbs-up](experiments/06_social_gestures/README.md)
+- [Social gesture webcam test script](scripts/testing/test_social_gestures.py)
+- [Dataset sources](datasets/sources.md) and [preparation notes](datasets/preparation.md)
+- [Windows local setup](LOCAL_SETUP.md)
+- [Vision integration plan](integration_plan.md)
+
+**Current scope:** The two vision approaches have been tested separately on a Windows laptop. Running both together, Raspberry Pi deployment and actual prosthetic actuation have not been demonstrated. The earlier reconstructed scripts mentioned above were intentionally removed; refer to the original verified SSD scripts when restoring other tests.
