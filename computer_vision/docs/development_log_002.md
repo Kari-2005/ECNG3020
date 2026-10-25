@@ -29,3 +29,7 @@ These confidence values are selected informal observations, **not accuracy estim
 **Code:** `../scripts/test_camera.py` (reconstructed reference script; compare with original computer files before treating as exact executed code).
 
 **References:** https://docs.ultralytics.com/ ; https://docs.opencv.org/
+
+
+## Verified source-code location (25 October 2026)
+The original uploaded baseline script is now available at [`scripts/testing/test_camera.py`](../scripts/testing/test_camera.py). This supersedes the earlier reconstructed-code path; all earlier test observations remain exploratory.
