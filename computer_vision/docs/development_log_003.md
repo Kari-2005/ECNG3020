@@ -14,3 +14,7 @@ Instead of expecting the detector to issue motor commands, translate class names
 **Code:** `../scripts/test_yolo_world.py` and `../configs/grasp_mapping_draft.py`. Both are draft reconstructions; grasp mapping does not actuate the prosthetic.
 
 **References:** https://github.com/AILab-CVC/YOLO-World ; https://docs.ultralytics.com/models/yolo-world/
+
+
+## Verified source-code location (25 October 2026)
+The actual YOLO-World test script is now archived at [`scripts/testing/test_yolo_world.py`](../scripts/testing/test_yolo_world.py). The grasp mapping remains **proposed**, not an uploaded or tested standalone control configuration.
