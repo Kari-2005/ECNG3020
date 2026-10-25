@@ -23,3 +23,15 @@
 **Local setup:** Put `gesture_recognizer.task` in `models/` under the local computer-vision project, then run the social gesture test via its Python environment.
 
 **Code:** [Original webcam test](../../test_social_gestures.py) and [organized-folder copy](../../scripts/testing/test_social_gestures.py). The three webcam screenshots were captured during testing; the recorded confidence values are individual examples, not overall classification accuracy.
+
+
+## Verified webcam screenshots (uploaded 25 October 2026)
+Three user-supplied captures show the original MediaPipe webcam application's displayed gesture interpretation, a raw recognizer category/confidence, and yellow hand landmarks:
+
+| Displayed interaction | MediaPipe raw output in screenshot | Confidence |
+|---|---|---:|
+| FIST BUMP | `Closed_Fist` | 0.89 |
+| HIGH FIVE | `Open_Palm` | 0.70 |
+| THUMBS UP | `Thumb_Up` | 0.72 |
+
+The original [uploaded script](../../test_social_gestures.py) was verified against the repository copy. It uses MediaPipe `RunningMode.VIDEO`, `num_hands=1`, confidence threshold 0.65 and at least five matching outputs in a seven-frame queue. The yellow dots show landmarks; these pictures are individual successful illustrations, **not** accuracy or hand-intent validation. The actual image binaries have not yet been committed to GitHub.
