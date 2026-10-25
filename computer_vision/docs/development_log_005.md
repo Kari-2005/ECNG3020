@@ -56,3 +56,9 @@ The merged package is a **selected pilot**, not all original source images. Clas
 **Sources:** https://universe.roboflow.com/leong-moxsd/bag-px1ji/dataset/1 ; https://universe.roboflow.com/yiheng-project/jug-8qerw/dataset/4 ; https://universe.roboflow.com/cv-vkzcl/medicineboxes-bk9p1/dataset/1 ; https://docs.ultralytics.com/modes/train/
 
 **Code references:** `../scripts/train_prosthetic_14class.py`, `../scripts/test_prosthetic_14class.py` (draft reconstructions).
+
+
+## Retrospective status update — 25 October 2026
+**The training-pending statements above describe the historical stage when this log was drafted.** Later experiments established that the 14-class pilot *was trained* for 10 epochs. The newer [Experiment 04 record](../experiments/04_14class_pilot/README.md) reports validation precision 0.707, recall 0.671, mAP50 0.706, mAP50–95 0.511 and approximately 2.13 hours of CPU training. Webcam testing later indicated unstable boxes, false positives and problems recognizing some utensils. Consequently a focused five-class detector (bottle, tennis_ball, pen, bag, phone) was developed and trained over 30 epochs; [Experiment 05](../experiments/05_5class_model/README.md) reports validation mAP50 0.847 and mAP50–95 0.657 on a **different dataset**, so this is not a controlled head-to-head comparison. The prior reconstructed script links are *historical placeholders* and original working SSD scripts are still pending.
+
+For the reasoning behind the 14-to-5 class transition, see [decisions and lessons](development_decisions_and_lessons.md); for label remapping and source caveats, see [dataset version history](../datasets/version_history.md); for run comparison, see [training/evaluation summary](training_and_evaluation_summary.md).
