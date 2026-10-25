@@ -169,3 +169,7 @@ BSc Electrical & Computer Engineering
 The University of the West Indies, St. Augustine
 
 *This README is a living record of an individual engineering project. Planned features and selected purchase items will be updated as they are tested and finalized.*
+
+
+## Repository inventory correction — 25 October 2026
+The early repository-layout example above is a historical snapshot, **not a current directory listing**. The repository now also includes [computer vision development logs, six experiment records, dataset provenance notes and model comparison documents](computer_vision/README.md). The executed YOLO experiment scripts remain to be restored from verified files on the Samsung SSD; avoid treating reconstructed placeholder scripts as the definitive source. The computer vision models have been trained/tested on a Windows laptop, **not yet integrated with Raspberry Pi, ROS 2, EMG, ESP32 or a physical prosthetic**.
