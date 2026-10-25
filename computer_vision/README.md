@@ -1,42 +1,50 @@
-# ECNG 3020 — Robotic Prosthetic Hand: Computer Vision
+# ECNG 3020 — Computer Vision Subsystem
 
-This folder documents the vision subsystem's development from pretrained YOLO26n webcam tests to an experimental fourteen-class dataset and prospective grasp selection.
+This directory documents the experimental vision subsystem for a deep-learning-assisted robotic prosthesis. **Object detection suggests a grasp; it does not authorize motor movement.**
 
-## Development history
-- [Log 001 — Setup](docs/development_log_001.md)
-- [Log 002 — YOLO26n webcam baseline](docs/development_log_002.md)
-- [Log 003 — YOLO-World alternative](docs/development_log_003.md)
-- [Log 004 — Tennis-ball/apple fine-tuning](docs/development_log_004.md)
-- [Log 005 — Dataset progression to 14 classes](docs/development_log_005.md)
-- [Vision architecture and future integration](docs/vision_system_overview.md)
+## Development logs
+- [001 — Software setup](docs/development_log_001.md)
+- [002 — Pretrained YOLO26n baseline](docs/development_log_002.md)
+- [003 — YOLO-World evaluation](docs/development_log_003.md)
+- [004 — Tennis-ball/apple fine-tuning](docs/development_log_004.md)
+- [005 — Dataset evolution to 14 classes](docs/development_log_005.md)
+- [Decisions and lessons learned](docs/development_decisions_and_lessons.md)
+- [Training and evaluation summary](docs/training_and_evaluation_summary.md)
+- [Vision system overview](docs/vision_system_overview.md)
 
-## Source code and experiment scripts
+## Original experiment scripts (uploaded from SSD)
+- [Initial pretrained YOLO webcam test](scripts/testing/test_camera.py)
+- [YOLO-World open-vocabulary webcam test](scripts/testing/test_yolo_world.py)
+- [First tennis-ball/apple trained-model webcam test](scripts/testing/test_trained_model.py)
+- [Train 14-class detector](scripts/training/train_prosthetic_14class.py)
+- [Test 14-class detector](scripts/testing/test_prosthetic_14class.py)
+- [Train 5-class detector](scripts/training/train_prosthetic_5class.py)
+- [Test 5-class detector](scripts/testing/test_prosthetic_5class.py)
+- [Original MediaPipe gesture test](test_social_gestures.py)
+- [Folder-adapted gesture test](scripts/testing/test_social_gestures.py)
 
-- [Original MediaPipe social-gesture webcam script](test_social_gestures.py)
-- [Folder-adapted MediaPipe testing script](scripts/testing/test_social_gestures.py)
-- [Six experiment records](experiments/README.md)
+These YOLO files were copied from user-uploaded SSD scripts, **not reconstructed from conversation notes**. The exact two-class *training* script has not yet been uploaded; only its original testing script is present. File-relative paths in these scripts reflect the original SSD layout and may require adjustment if run directly from the organized GitHub folders.
 
-The initial YOLO and training scripts are being restored from the verified SSD files. Earlier reconstructed versions were intentionally removed and are not presented as working source code.
+## Six experimental stages
+[Experiment index](experiments/README.md) covers:
+1. Pretrained YOLO26n webcam detection;
+2. YOLO-World text-prompt detection;
+3. two-class tennis-ball/apple fine-tuning;
+4. fourteen-class YOLO26n pilot;
+5. focused five-class YOLO26n detector (bottle, tennis_ball, pen, bag, phone);
+6. MediaPipe webcam gesture recognition (open palm/high-five candidate, closed fist/fist-bump candidate, thumbs-up).
 
-## Updated experiments (October 2026)
+The 14-class and five-class models were trained on a Windows CPU. The six experiments are not proof of completed Raspberry Pi or prosthetic integration.
 
-The original development logs above are retained as historical records. Since those logs, the **14-class model was trained and evaluated**, a **five-class model was trained and webcam-tested**, and a **three-gesture MediaPipe webcam proof of concept** was demonstrated.
+## Dataset and model evidence
+- [Dataset source attribution](datasets/sources.md)
+- [Version and QA history](datasets/version_history.md)
+- [Data preparation](datasets/preparation.md)
+- [14-class results](experiments/04_14class_pilot/README.md)
+- [Five-class results](experiments/05_5class_model/README.md)
+- [MediaPipe gesture results](experiments/06_social_gestures/README.md)
+- [Integration plan](integration_plan.md)
 
-- [All six experiments](experiments/README.md)
-- [14-class pilot results](experiments/04_14class_pilot/README.md)
-- [Five-class detector results](experiments/05_5class_model/README.md)
-- [High-five, fist bump and thumbs-up](experiments/06_social_gestures/README.md)
-- [Social gesture webcam test script](scripts/testing/test_social_gestures.py)
-- [Dataset sources](datasets/sources.md) and [preparation notes](datasets/preparation.md)
-- [Windows local setup](LOCAL_SETUP.md)
-- [Vision integration plan](integration_plan.md)
+Five-class screenshot examples were supplied for **pen (.80), phone (.89), bag (.79), tennis_ball (.95) and bottle (.87)**. MediaPipe examples showed **Closed_Fist (.89), Open_Palm (.70), Thumb_Up (.72)** with hand landmarks. These are **individual webcam confidence values, not model accuracy**. Original images were reviewed but are not yet stored as binary files in GitHub.
 
-**Current scope:** The two vision approaches have been tested separately on a Windows laptop. Running both together, Raspberry Pi deployment and actual prosthetic actuation have not been demonstrated. The earlier reconstructed scripts mentioned above were intentionally removed; refer to the original verified SSD scripts when restoring other tests.
-
-
-## Extended development audit (25 October 2026)
-- [Decision history and lessons learned](docs/development_decisions_and_lessons.md) — reasons for model and scope changes, observed failures and planned grasp mappings.
-- [Dataset versions and quality checks](datasets/version_history.md) — class remapping, source caveats, pilot counts and QA limitations.
-- [Training and evaluation summary](docs/training_and_evaluation_summary.md) — comparison of the two-class, 14-class and five-class runs.
-
-Earlier source-code references in historical logs are retained for chronology but may point to files intentionally removed pending verification against the Samsung SSD. The original executed YOLO scripts should be restored only from the SSD. No model checkpoint or dataset ZIP was added with this audit.
+No weights (`.pt`), raw datasets, run archives or virtual environments are committed here. Dataset provenance and test-set metrics should be verified before use in a final research report.
