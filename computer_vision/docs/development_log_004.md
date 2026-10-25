@@ -24,3 +24,7 @@ Apple recognition still needed improvement, and the two-class model produced a f
 
 ## Retrospective clarification — 25 October 2026
 The 10-epoch two-class run was a *technical learning and error-analysis experiment*, not the final model for all objects. The reported successful detection of the faded tennis ball established a useful qualitative improvement, while non-target false positives and weak apple recognition motivated wider annotation QA and background negatives. We have not archived formal test-set measures for this pilot. See [training comparison](training_and_evaluation_summary.md) and [dataset version history](../datasets/version_history.md). The code links above refer to **reconstructed examples that were removed pending the original SSD files**; they are not currently authoritative repository scripts.
+
+
+## Verified source-code location (25 October 2026)
+The original tennis-ball/apple inference test is [`scripts/testing/test_trained_model.py`](../scripts/testing/test_trained_model.py). It loads `training_runs/tennis_ball_apple_v1-2/weights/best.pt` and filters `tennis-ball` and `apple`. The original two-class *training* script remains outstanding. Earlier references to `test_ball_model.py` are superseded.
