@@ -1,28 +1,27 @@
-# Computer Vision — Proposed Prosthetic Integration
+# Computer Vision — How I Plan to Connect It to the Hand
 
-## Status
+## Where things stand
 
-The object detector and gesture recognizer have been tested independently using a Windows laptop webcam. Their combined real-time operation, Raspberry Pi 5 deployment, ESP32-S3 communication and physical prosthetic actuation remain untested.
+I've tested the five-object YOLO model and the MediaPipe gesture recognizer separately on a laptop. MediaPipe has recognized **an open palm (high-five), closed fist (fist bump) and thumbs up**. I haven't tested both models at the same time or connected them to the physical prosthetic yet.
 
-## Planned architecture
+## What I want the system to do
 
-1. Raspberry Pi Camera Module 3 Wide provides live frames to Raspberry Pi 5.
-2. YOLO26n recognizes five selected object categories and suggests a grasp type.
-3. MediaPipe independently recognizes candidate social gestures: high-five, fist bump, thumbs-up.
-4. Decision layer handles conflicting/uncertain detections and asks for user confirmation.
-5. The EMG interface supplies an intentional control trigger; the ESP32-S3 performs constrained low-level servo control.
-6. Finger FSRs support grip-pressure feedback and the sleeve's vibration modules provide localized haptic information.
+1. Use the Raspberry Pi camera to look at what is in front of the prosthetic.
+2. Use my trained YOLO26n model to recognize a bottle, tennis ball, pen, bag or phone and suggest a suitable grasp.
+3. Use MediaPipe as another vision option to recognize a high-five, fist bump or thumbs up.
+4. Decide which hand posture makes sense, but **not move the motors based only on the camera**.
+5. Have the user confirm movement using the EMG signal.
+6. Send the intended movement to the ESP32-S3, which will control the servos while checking limits and sensor feedback.
 
-Avoid treating a video classification as a direct motor command. Include stable-confidence checks, permitted grasp states, emergency stop/timeout, appropriate servo power and force/current limits, and safe body-connected EMG electrical practices.
+For a high-five the hand could open. For a fist bump it could make a fist. I still have to see if the tendon-driven hand can make a convincing thumbs up with the planned thumb design. These movements are ideas, not completed physical tests.
 
-## Proposed verification order
+## Things I still need to work on
 
-- Archive code/model versions and test on the laptop.
-- Evaluate held-out five-class test images; measure frame rate and latency.
-- Test object and gesture recognition simultaneously.
-- Deploy and profile on Raspberry Pi 5.
-- Exchange *non-actuating* serial test messages with ESP32-S3.
-- Validate finger tendon motion, control limits and tactile feedback on the bench.
-- Introduce user-confirmed EMG-triggered interactions only after safety testing.
+- Test both vision approaches together.
+- See what frame rate I can get on the Raspberry Pi 5.
+- Check performance under different camera angles and lighting.
+- Set up communication between the Pi and ESP32-S3.
+- Test finger movements and limits without relying on camera input first.
+- Keep the EMG confirmation and safety controls in the final system.
 
-Handshake recognition and advanced pose imitation are explicitly optional future work.
+If there is time, I may look at handshake detection. For now, the three working social gesture categories are enough for this part of the project.
