@@ -12,6 +12,7 @@ I am developing an affordable proof-of-concept upper-limb prosthetic hand that c
 
 - **Myoelectric control:** detect an intentional muscle contraction to activate a grasp.
 - **Vision-assisted grasp selection:** recognize an object and help select a suitable grasp, such as power, pinch or precision.
+- **Social gesture recognition (early webcam tests):** recognize an open palm/high-five, closed fist/fist bump and thumbs up using MediaPipe. I still need to connect this to the prosthetic.
 - **Tendon-driven fingers:** use servos and fishing-line tendons to open and close the hand.
 - **Grip-pressure sensing:** monitor contact at the fingertips to help limit excessive gripping.
 - **Wearable haptic feedback:** send touch information back through five vibration locations on a sleeve.
@@ -94,6 +95,14 @@ Optional additions:
 
 The pressure sensors will provide relative contact measurements, not perfect force measurements. Slip detection and automatic grip adjustment will need controlled testing before being presented as working features. Temperature sensing will be experimental feedback, **not guaranteed burn protection**.
 
+## Computer vision progress (October 2026)
+
+I've spent some time testing the camera recognition side before building the full hand. I first tried pretrained YOLO models, then a tennis-ball/apple model, then a 14-class model. After seeing some problems in the webcam tests, I made a smaller five-class YOLO26n model for bottle, tennis ball, pen, bag and phone. I have tested all five in webcam demonstrations, but I still need more proper testing before calling it reliable.
+
+I also tried MediaPipe to detect a few simple social gestures. It successfully showed **HIGH FIVE** for an open palm, **FIST BUMP** for a closed fist and **THUMBS UP** for a thumbs-up gesture. I started with the first two and then added thumbs up to my Python script. These are just laptop webcam tests so far, not movements performed by the actual prosthetic. I might try handshake detection later if there is time.
+
+I kept the code and notes under [computer_vision](computer_vision/README.md), including [my three-gesture script](computer_vision/test_social_gestures.py) and the [social gesture experiment](computer_vision/experiments/06_social_gestures/README.md).
+
 ## Software and simulation
 
 My intended workflow is:
@@ -109,11 +118,16 @@ I have been using **Ubuntu 24.04 and ROS 2 Jazzy** for early experiments. Earlie
 
 ## Repository layout
 
-These paths currently exist:
+Some of the main folders and files I've been working on are:
 
 ```text
 ECNG3020/
 ├── README.md
+├── computer_vision/
+│   ├── README.md
+│   ├── test_social_gestures.py
+│   ├── experiments/
+│   └── datasets/
 └── docs/
     ├── Component_Research_and_Decision_Log.md
     ├── System_Overview.md
@@ -124,7 +138,7 @@ ECNG3020/
 
 The **component decision log** contains the most recent comparisons and choices. **System_Overview.md is an earlier planning document and may contain superseded options**; this README and the decision log reflect the current direction.
 
-Possible future folders, once there are files to add: `cad/`, `ros2_ws/`, `firmware/`, `vision/`, `electronics/`, `testing/` and `report/`. These folders have **not yet been created**.
+Other project areas like CAD, electronics, firmware and testing will be organized as I continue working on them.
 
 ## Purchase and development status
 
