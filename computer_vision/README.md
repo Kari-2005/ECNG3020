@@ -1,39 +1,58 @@
-# ECNG 3020 — Robotic Prosthetic Hand: Computer Vision
+# Computer Vision — ECNG3020
 
-This folder documents the vision subsystem's development from pretrained YOLO26n webcam tests to an experimental fourteen-class dataset and prospective grasp selection.
+This folder is where I'm keeping the computer vision side of my final year robotic prosthetic project. I started by testing pretrained object detection models, then moved into training my own models for objects I wanted the hand to recognize. I also tried MediaPipe to identify simple hand gestures.
 
-## Development history
+## What I've done so far
+
+| Experiment | What I tried | Progress |
+|---|---|---|
+| [01 — Initial YOLO](experiments/01_initial_yolo/README.md) | Testing YOLO26n with my webcam | Tested |
+| [02 — YOLO-World](experiments/02_yolo_world/README.md) | Trying object names without training my own model | Tested |
+| [03 — Tennis ball and apple](experiments/03_tennis_ball_apple/README.md) | My first two-class trained model | Tested |
+| [04 — 14-class model](experiments/04_14class_pilot/README.md) | Training on more everyday objects | Trained, but webcam detection needed improvement |
+| [05 — 5-class model](experiments/05_5class_model/README.md) | Narrowing the model to bottle, tennis ball, pen, bag and phone | Trained and tested |
+| [06 — Social gestures](experiments/06_social_gestures/README.md) | Recognizing a high-five, fist bump and thumbs up | All three detected in webcam tests |
+
+## Social gesture recognition
+
+I wanted the hand to be able to respond to more than just physical objects, so I tested whether a camera could recognize someone giving a high-five or fist bump. I used MediaPipe's gesture recognizer instead of training another YOLO model.
+
+The first version recognized an open palm and a closed fist. I then added a thumbs-up gesture, and all three worked during my webcam tests.
+
+| Detected hand gesture | Label shown |
+|---|---|
+| Open palm | HIGH FIVE |
+| Closed fist | FIST BUMP |
+| Thumbs up | THUMBS UP |
+
+I'm keeping [my original working script](test_social_gestures.py) here. There is also a [copy adapted for the organized scripts folder](scripts/testing/test_social_gestures.py). The original expects the `models` folder to be beside it.
+
+These are still webcam tests only. The code does not move any servos, and recognizing a hand shape doesn't prove that someone actually wants a high-five or fist bump.
+
+## Where to look
+
+- [All experiments](experiments/README.md)
+- [Experiment 06 — how the three gestures were tested](experiments/06_social_gestures/README.md)
+- [Original social gesture code](test_social_gestures.py)
+- [Datasets and sources](datasets/README.md)
+- [Local VS Code setup](LOCAL_SETUP.md)
+- [Plans for connecting vision to the prosthetic](integration_plan.md)
+
+## Earlier notes
+
+I kept the earlier logs because I still want to show what I originally tried, even where my approach later changed:
+
 - [Log 001 — Setup](docs/development_log_001.md)
 - [Log 002 — YOLO26n webcam baseline](docs/development_log_002.md)
-- [Log 003 — YOLO-World alternative](docs/development_log_003.md)
-- [Log 004 — Tennis-ball/apple fine-tuning](docs/development_log_004.md)
-- [Log 005 — Dataset progression to 14 classes](docs/development_log_005.md)
-- [Vision architecture and future integration](docs/vision_system_overview.md)
+- [Log 003 — YOLO-World](docs/development_log_003.md)
+- [Log 004 — Tennis ball and apple](docs/development_log_004.md)
+- [Log 005 — Building the 14-class dataset](docs/development_log_005.md)
+- [Early vision system overview](docs/vision_system_overview.md)
 
-## Major experiment scripts
-- [Initial YOLO26n webcam test](scripts/test_camera.py)
-- [YOLO-World webcam test](scripts/test_yolo_world.py)
-- [Train tennis-ball/apple model](scripts/train_ball_model.py)
-- [Test tennis-ball/apple model](scripts/test_ball_model.py)
-- [Train 14-class detector](scripts/train_prosthetic_14class.py)
-- [Test 14-class detector](scripts/test_prosthetic_14class.py)
-- [Draft grasp mapping](configs/grasp_mapping_draft.py)
+Some early notes describe plans that have since changed. The experiment pages above are the more recent record.
 
-**Important:** These scripts are reconstructed from the recorded development conversation, **not byte-for-byte verified copies** of the working SSD scripts. Check local paths and experimental settings before running them; record revisions alongside future test results. The 14-class run is prepared, **not confirmed trained/evaluated**.
+## Next steps
 
-Large original and derived datasets, model weights (`.pt`), training run outputs and virtual environments are excluded from these commits. Keep original Roboflow source exports and their credits/licenses separately. Do not claim verified performance without independent evaluation.
+I still need to test both the object model and MediaPipe together, see how well they run on a Raspberry Pi 5 and work on connecting the output to the ESP32-S3. EMG confirmation and safe motion limits will be needed before the prosthetic actually moves in response to a detected object or gesture. Handshake recognition is something I might add if there is time.
 
-## Updated experiments (October 2026)
-
-The original development logs above are retained as historical records. Since those logs, the **14-class model was trained and evaluated**, a **five-class model was trained and webcam-tested**, and a **three-gesture MediaPipe webcam proof of concept** was demonstrated.
-
-- [All six experiments](experiments/README.md)
-- [14-class pilot results](experiments/04_14class_pilot/README.md)
-- [Five-class detector results](experiments/05_5class_model/README.md)
-- [High-five, fist bump and thumbs-up](experiments/06_social_gestures/README.md)
-- [Social gesture webcam test script](scripts/testing/test_social_gestures.py)
-- [Dataset sources](datasets/sources.md) and [preparation notes](datasets/preparation.md)
-- [Windows local setup](LOCAL_SETUP.md)
-- [Vision integration plan](integration_plan.md)
-
-**Current scope:** The two vision approaches have been tested separately on a Windows laptop. Running both together, Raspberry Pi deployment and actual prosthetic actuation have not been demonstrated. The earlier reconstructed scripts mentioned above were intentionally removed; refer to the original verified SSD scripts when restoring other tests.
+Large datasets, training checkpoints and the virtual environment are kept outside the GitHub repository for now.
