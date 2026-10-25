@@ -32,3 +32,11 @@ The original development logs above are retained as historical records. Since th
 - [Vision integration plan](integration_plan.md)
 
 **Current scope:** The two vision approaches have been tested separately on a Windows laptop. Running both together, Raspberry Pi deployment and actual prosthetic actuation have not been demonstrated. The earlier reconstructed scripts mentioned above were intentionally removed; refer to the original verified SSD scripts when restoring other tests.
+
+
+## Extended development audit (25 October 2026)
+- [Decision history and lessons learned](docs/development_decisions_and_lessons.md) — reasons for model and scope changes, observed failures and planned grasp mappings.
+- [Dataset versions and quality checks](datasets/version_history.md) — class remapping, source caveats, pilot counts and QA limitations.
+- [Training and evaluation summary](docs/training_and_evaluation_summary.md) — comparison of the two-class, 14-class and five-class runs.
+
+Earlier source-code references in historical logs are retained for chronology but may point to files intentionally removed pending verification against the Samsung SSD. The original executed YOLO scripts should be restored only from the SSD. No model checkpoint or dataset ZIP was added with this audit.
