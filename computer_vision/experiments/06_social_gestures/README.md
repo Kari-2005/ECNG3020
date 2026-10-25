@@ -1,23 +1,61 @@
-# Experiment 06 — MediaPipe Social Gesture Recognition
+# Experiment 06 — High-Five, Fist Bump and Thumbs Up
 
-**Goal:** Recognize simple social gestures using a webcam as an optional extension of the prosthetic hand's interaction capabilities.
+## Why I tried this
 
-**Current demonstrated gestures:**
+Along with detecting objects that the prosthetic might pick up, I wanted to see whether it could recognize a few basic social gestures. I started with a high-five and a fist bump, since these seemed fairly simple. I later added thumbs up to the same code.
 
-| MediaPipe category | Displayed interaction | Confidence in captured example |
-|---|---|---:|
-| `Open_Palm` | HIGH FIVE | 0.70 |
-| `Closed_Fist` | FIST BUMP | 0.89 |
-| `Thumb_Up` | THUMBS UP | 0.72 |
+I haven't connected this to the physical hand yet. This experiment is only to see whether the webcam can identify the gestures.
 
-**Implementation:** MediaPipe Tasks Gesture Recognizer, OpenCV webcam input, up to one detected hand, 21 estimated landmarks displayed, model confidence threshold 0.65, and temporal vote requirement of five matching classifications within a seven-frame window.
+## What I used
 
-**Contribution:** The original two-gesture prototype was extended to recognize `Thumb_Up` and tested successfully. Captured screenshots show each respective label and hand landmarks. They are demonstration frames, not a formal benchmark.
+- Python and OpenCV for the webcam.
+- Google's MediaPipe Gesture Recognizer and its pretrained `gesture_recognizer.task` model.
+- The laptop webcam to test the gestures.
+- A seven-frame history to make the label a little less jumpy.
 
-**Limitations:** Hand shape is not the same as social intent. An open palm could be a wave; a closed fist might not be an invitation to fist-bump. Stability across people, environments, angles and lighting has not yet been systematically evaluated.
+## How my code works
 
-**Planned prosthetic interaction:** Map recognized gestures to a *candidate* open-hand, closed-fist or thumbs-up posture (subject to mechanics); require safe user/EMG confirmation before motion. No actuation was performed during this experiment.
+The camera captures a frame, MediaPipe checks the hand gesture and returns a category and confidence score. I used these categories:
 
-**Future extension:** Handshake-offer detection remains optional and has not been implemented.
+| MediaPipe output | What my program shows |
+|---|---|
+| `Open_Palm` | `HIGH FIVE` |
+| `Closed_Fist` | `FIST BUMP` |
+| `Thumb_Up` | `THUMBS UP` |
 
-**Local setup:** Put `gesture_recognizer.task` in `models/` under the local computer-vision project, then run the social gesture test via its Python environment.
+I used a confidence threshold of **0.65**. If the result is below that, it is treated as no recognized gesture. To help with flickering, the program also needs **five matching predictions out of the most recent seven frames** before showing one of the three main labels.
+
+It also draws the detected hand landmarks, so I can see the points that are being tracked.
+
+## Results so far
+
+I tried all three gestures in front of the webcam and managed to get the correct labels.
+
+| Gesture | Confidence in screenshot |
+|---|---:|
+| High-five/open palm | 0.70 |
+| Fist bump/closed fist | 0.89 |
+| Thumbs up | 0.72 |
+
+These scores are from individual example frames. I haven't done a proper accuracy test with different people, lighting conditions and distances yet, so I don't want to claim that the system is always correct.
+
+## Code
+
+- [My original test script](../../test_social_gestures.py) — this is the version I ran and edited to include thumbs up.
+- [Organized-folder copy](../../scripts/testing/test_social_gestures.py) — adjusted to find the model when the code is inside `scripts/testing`.
+
+For the original version, the MediaPipe model goes in `computer_vision/models/gesture_recognizer.task`. Run it from the `computer_vision` folder using:
+
+```powershell
+.\.venv-vyonix\Scripts\python.exe test_social_gestures.py
+```
+
+Press **Q** to close the webcam.
+
+## What I noticed / things to improve
+
+The three gestures were recognized in my first successful webcam tests, which means I can try using them as an extra input for the prosthetic. But an open hand might just be someone waving and a fist might not actually be an invitation for a fist bump.
+
+For now, I only want the camera to suggest a hand posture. Before the prosthetic moves, I still plan to use the EMG signal as a confirmation and check the servo limits.
+
+If I have enough time later, I might also try recognizing someone offering a handshake. That is not part of the working code yet.
