@@ -43,3 +43,11 @@ Using **one specialized detector** is preferred over two concurrently running mo
 - Object detection does not estimate grasp orientation, stability or safe force by itself.
 
 See `development_log_002.md` through `development_log_005.md` for the detailed rationale.
+
+
+## Current status addendum — 25 October 2026
+The descriptions above preserve the original design stage. Since then, **14-class YOLO26n training has completed**, with practical detection problems recorded in [Experiment 04](../experiments/04_14class_pilot/README.md). A more focused **five-class detector** has also been trained and webcam-tested ([Experiment 05](../experiments/05_5class_model/README.md)). The five classes are bottle, tennis_ball, pen, bag and phone. The original six-grasp taxonomy remains a long-term design proposal, not a claim that all grasp types have been implemented.
+
+**MediaPipe has also been tested** for three gesture categories (open palm/high-five candidate, closed fist/fist-bump candidate, thumbs-up), as recorded in [Experiment 06](../experiments/06_social_gestures/README.md). The earlier proposal for handshake detection remains unimplemented. No combined real-time Pi deployment, wearer intent validation, ROS 2 actuation or physical prosthetic integration has been demonstrated.
+
+For a consolidated account, see [decisions and lessons](development_decisions_and_lessons.md) and [training/evaluation summary](training_and_evaluation_summary.md).
