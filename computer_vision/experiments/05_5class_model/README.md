@@ -32,3 +32,18 @@
 **Checkpoint path for local testing:** `runs/prosthetic_5class_v1-2/weights/best.pt`.
 
 See [dataset preparation](../../datasets/preparation.md) and [sources](../../datasets/sources.md).
+
+## Verified webcam screenshots (uploaded 25 October 2026)
+Five user-supplied screenshots from the original webcam test `test_prosthetic_5class.py` show successful single-frame classifications and approximate object boxes:
+
+| Object shown | Predicted class | Displayed confidence |
+|---|---|---:|
+| Blue ballpoint pen | pen | 0.80 |
+| Handheld phone | phone | 0.89 |
+| Carried purple bag | bag | 0.79 |
+| Worn pale-green tennis ball | tennis_ball | 0.95 |
+| Handheld water bottle | bottle | 0.87 |
+
+The five images use the same webcam application and display a predicted bounding box around the relevant object. In the tennis-ball image the original faded ball was recognized correctly, a noteworthy qualitative improvement from the initial pretrained-model failure. These are **selected examples**, not a denominator-based accuracy or evidence of robustness to other people, scenes, or grip orientations. Image binary files remain pending upload into the repository; the screenshots were provided in the accompanying development conversation.
+
+**Verified code links:** [training](../../scripts/training/train_prosthetic_5class.py) and [webcam test](../../scripts/testing/test_prosthetic_5class.py). The script uses `conf=0.40`, `iou=0.50`, `imgsz=416` on CPU and loads `runs/prosthetic_5class_v1-2/weights/best.pt` from the original project folder. The user-uploaded training script requests `name=prosthetic_5class_v1` with `exist_ok=False`, consistent with Ultralytics creating a numbered follow-up run after the initial attempted run.
