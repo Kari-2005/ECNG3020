@@ -4,7 +4,7 @@
 
 | Experiment | Classes | Train / Val / Test | Epochs | Input | Batch | Compute | Duration | Outcome |
 |---|---:|---|---:|---:|---:|---|---|---|
-| Tennis ball vs apple | 2 | 438 / 124 / 68 | 10 | 416 | 4 | Windows CPU | Not recorded | User reported worn tennis ball recognized; apple weakness and false positives remain |
+| Tennis ball vs apple | 2 | 438 / 124 / 68 | 10 | 416 | **8** | Windows CPU | Not recorded | User reported worn tennis ball recognized; apple weakness and false positives remain |
 | Broad 14-class pilot | 14 | 2,288 / 518 / 366 | 10 | 416 | 4 | Windows CPU | ~2.13 h | Validation P=.707, R=.671, mAP50=.706, mAP50–95=.511 |
 | Focused five-class model | 5 | 4,630 / 374 / 184 | 30 | 416 | 4 | Windows CPU | ~8 h | Validation P=.880, R=.778, mAP50=.847, mAP50–95=.657 |
 
@@ -24,3 +24,7 @@ These validation runs have different class lists, data amounts and splits. The m
 Exact original scripts, YAMLs, run `args.yaml`, `results.csv`, confusion matrix images, validation plots, training package versions, independent test scores and optional original model files or hashes. Model weights should remain on SSD or an appropriate release/artifact host, not ordinary Git.
 
 References: [14-class run](../experiments/04_14class_pilot/README.md), [five-class run](../experiments/05_5class_model/README.md), [source provenance](../datasets/sources.md).
+
+
+## Verified original two-class run configuration — 25 October 2026
+The original Ultralytics `args.yaml` from `training_runs/tennis_ball_apple_v1-2` was supplied and confirms model `yolo26n.pt`, data `datasets/ball_experiment/combined/data.yaml`, epochs **10**, batch **8**, input size **416**, CPU, `workers=0`, `pretrained=true`, `optimizer=auto`, `seed=0`, `val=true` and `plots=true`. **Earlier documentation stating batch 4 for this specific run was incorrect and superseded.** The original training Python script has not been located, but this saved Ultralytics run configuration documents the actual settings. The original webcam test is [`test_trained_model.py`](../scripts/testing/test_trained_model.py).
