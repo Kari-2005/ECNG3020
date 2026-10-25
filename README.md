@@ -95,13 +95,44 @@ Optional additions:
 
 The pressure sensors will provide relative contact measurements, not perfect force measurements. Slip detection and automatic grip adjustment will need controlled testing before being presented as working features. Temperature sensing will be experimental feedback, **not guaranteed burn protection**.
 
-## Computer vision progress (October 2026)
+## Computer vision development (October 2026)
 
-I've spent some time testing the camera recognition side before building the full hand. I first tried pretrained YOLO models, then a tennis-ball/apple model, then a 14-class model. After seeing some problems in the webcam tests, I made a smaller five-class YOLO26n model for bottle, tennis ball, pen, bag and phone. I have tested all five in webcam demonstrations, but I still need more proper testing before calling it reliable.
+I have been working on the camera-based part of the project while the mechanical design and component selection are still ongoing. My main reason for doing this first was to test how well the recognition software would work before depending on it to help control the prosthetic.
 
-I also tried MediaPipe to detect a few simple social gestures. It successfully showed **HIGH FIVE** for an open palm, **FIST BUMP** for a closed fist and **THUMBS UP** for a thumbs-up gesture. I started with the first two and then added thumbs up to my Python script. These are just laptop webcam tests so far, not movements performed by the actual prosthetic. I might try handshake detection later if there is time.
+### Object recognition
 
-I kept the code and notes under [computer_vision](computer_vision/README.md), including [my three-gesture script](computer_vision/test_social_gestures.py) and the [social gesture experiment](computer_vision/experiments/06_social_gestures/README.md).
+I started by experimenting with pretrained **YOLO26n** and **YOLO-World** through a webcam. After that, I trained a small two-class tennis-ball/apple model to learn the custom training process. I later tried a 14-class model to recognize a wider range of everyday objects.
+
+The 14-class model completed training, but the webcam tests were not as consistent as I wanted. Some objects were difficult to recognize, and I saw incorrect or unstable detections. I decided to narrow the next version to five classes: **bottle, tennis ball, pen, bag and phone**.
+
+I rebuilt and cleaned the dataset, then trained a five-class YOLO26n model for **30 epochs** on **4,630 training images**. The run took approximately eight hours on a CPU. Its validation results were:
+
+| Metric | Five-class model |
+|---|---:|
+| Precision | 88.0% |
+| Recall | 77.8% |
+| mAP@50 | 84.7% |
+| mAP@50–95 | 65.7% |
+
+I was able to demonstrate detections for all five classes using a webcam. These are useful early results, but I still need to evaluate the held-out test set and check performance under different real-world conditions. The validation metrics should also not be treated as directly comparable to the 14-class model, because the datasets and class sets are different.
+
+### Social gesture recognition
+
+I also wanted to explore whether the prosthetic could recognize a few basic social gestures in addition to objects. For this I used **MediaPipe Gesture Recognizer** with OpenCV, rather than training another object detector.
+
+I first tested an open palm and closed fist, then modified the Python script to include a thumbs-up gesture as well.
+
+| Gesture recognized | Label shown on webcam | Example confidence |
+|---|---|---:|
+| Open palm | HIGH FIVE | 0.70 |
+| Closed fist | FIST BUMP | 0.89 |
+| Thumbs up | THUMBS UP | 0.72 |
+
+The code uses a **0.65 confidence threshold** and checks for **five matching predictions within a seven-frame history** to reduce flickering. It also draws hand landmarks on the image. All three gestures were recognized in initial webcam tests, although the scores above come from individual example frames rather than a formal accuracy study.
+
+For the eventual prosthetic, I am considering an open-hand posture for a high-five, a closed fist for a fist bump and a thumbs-up posture if the mechanical design allows it. These remain proposed responses. The camera is not currently connected to the servos, and an **intentional EMG trigger** would still be needed before movement.
+
+I have documented the development stages, training results, dataset work and gesture experiment in the [computer vision folder](computer_vision/README.md). The [original three-gesture Python script](computer_vision/test_social_gestures.py) and [Experiment 06 notes](computer_vision/experiments/06_social_gestures/README.md) are also included. Combining the object and gesture models, testing on the Raspberry Pi 5 and connecting to the ESP32-S3 are still to be done. Handshake recognition is only a possible future extension.
 
 ## Software and simulation
 
